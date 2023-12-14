@@ -1,0 +1,224 @@
+* {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Old versions of Firefox */
+    -ms-user-select: none;
+    /* Innet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+                                    supported by Chrome, Edge, Opera and Firefox */
+    font-family: 'Mina', sans-serif;
+}
+
+#main--container {
+    position: fixed;
+    width: 30vw;
+    height: 30vh;
+    left: 35vw;
+    top: 35vh;
+    background-color: #ccc;
+    text-align: center;
+}
+
+.main--animation {
+    animation-name: swap;
+    animation-duration: 0.4s;
+}
+
+@keyframes swap {
+    0% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(0);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+.main--text {
+    font-size: 1em;
+}
+
+#question-control {
+    position: fixed;
+    left: 45vw;
+    top: 70vh;
+}
+
+.changebtn {
+    width: 3vw;
+    height: 3vw;
+    border-radius: 50%;
+}
+
+.material-symbols-outlined {
+    margin-left: 3px;
+}
+
+#input-bar {
+    position: fixed;
+    left: -3vw;
+    top: 0;
+    width: 23vw;
+    height: calc(100vh - 8px);
+    background-color: #999;
+    border: #4545aa solid 4px;
+    transition: left 0.7s ease-in-out;
+    /* border-radius: 0 30px 30px 0; */
+    overflow: hidden auto;
+}
+
+#input-bar::-webkit-scrollbar {
+    border-radius: 10px;
+    width: 0.6vw;
+    position: fixed;
+    left: 0;
+}
+
+#input-bar::-webkit-scrollbar-track {
+    background: #999;
+    border-radius: 10px;
+}
+
+#input-bar::-webkit-scrollbar-thumb {
+    background: #d9ca77;
+    border-radius: 10px;
+}
+
+
+#input-bar::-webkit-scrollbar-thumb:hover {
+    background: #a6963a;
+}
+
+
+#input-bar.collapsed {
+    left: calc(-20vw - 0.7vw);
+}
+
+#input--toggle {
+    position: relative;
+    left: 20vw;
+    top: 46vh;
+    width: 5vh;
+    height: 8vh;
+    border-radius: 0 20px 20px 0;
+    border: solid 0.7vw;
+    background-color: #999;
+    border-color: #4545aa #4545aa #4545aa #999;
+}
+
+#input--question-container {
+    margin-top: 4vh;
+    margin-left: 2.5vw;
+}
+
+#input--question-container input {
+    width: 9vw;
+    height: 1.3vw;
+}
+
+#input--question-container input:nth-child(odd) {
+    margin-left: 0.7vw;
+}
+
+#input--add-btn {
+    width: 24px;
+    height: 24px;
+    transform: scale(1.4);
+    filter: invert(82%) sepia(43%) saturate(1130%) hue-rotate(349deg) brightness(90%) contrast(100%);
+    margin-left: calc(10vw - 15px);
+    margin-top: 8px;
+}
+
+#input--save {
+    position: fixed;
+    background-color: #4545aa;
+    right: 10vw;
+    top: calc(50vh - 0.5vw);
+    width: 5vw;
+    height: 2vw;
+    color: #ccc;
+    border-radius: 4px;
+    border: 3px solid #999;
+}
+
+#input--name-container {
+    position: fixed;
+    left: 32.5vw;
+    top: 3vh;
+}
+
+#input--name-label {
+    font-size: 1.4em;
+    margin-bottom: 0vh;
+}
+
+#input--name-field {
+    width: 35vw;
+    height: 5vh;
+    font-size: 2em;
+}
+
+#set-bar {
+    position: fixed;
+    right: 0vw;
+    top: 0;
+    width: 19vw;
+    height: 100vh;
+    background-color: #999;
+    transition: right 0.4s ease-in-out;
+}
+
+#set-bar.collapsed {
+    right: -19vw;
+}
+
+#set-bar--expander {
+    position: fixed;
+    right: 1vw;
+    top: 1vw;
+    transform: scale(1.65);
+}
+
+#set-bar--top-label {
+    margin-top: 3vh;
+    margin-left: 1.5vw;
+    font-size: 1.6em;
+}
+
+#set-bar--new-set {
+    background-color: #4545aa;
+    top: calc(50vh - 0.5vw);
+    width: 5vw;
+    height: 2vw;
+    margin-top: 0.8vw;
+    margin-left: 1vw;
+    color: #ccc;
+    border-radius: 4px;
+    border: 3px solid #555;
+}
+
+.myset--card {
+    display: block;
+    width: 17vw;
+    margin-left: 1vw;
+    height: 5vh;
+    transition: filter 0.08s ease-in;
+}
+
+.myset--card:hover {
+    filter: brightness(60%)
+}
+
+.hidden {
+    display: none !important;
+}
