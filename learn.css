@@ -1,0 +1,75 @@
+#learn-title {
+    justify-self: center;
+    margin: auto;
+}
+
+#learn--main-container {
+    width: 40vw;
+    height: 55vh;
+    background-color: #999;
+    position: fixed;
+    left: 30vw;
+    top: 12vh;
+    border: 4px solid #000;
+    border-radius: 20px;
+}
+
+#learn--main--title {
+    position: relative;
+    left: 1vw;
+    top: 3vh;
+}
+
+#learn--mc-container {
+    position: relative;
+    top: 25vh;
+}
+
+.learn--mc-btn {
+    width: 18vw;
+    height: 3vw;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+.learn--mc-btn:hover {
+    color: #fff;
+    background-color: #888;
+}
+.center {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.learn--true-btn.revealed {
+    background-color: #014421;
+    color: #fff;
+}
+
+.learn--false-btn.revealed {
+    background-color: #CE2029;
+    color: #fff;
+}
+
+#learn--next-container {
+    position: fixed;
+    bottom: 0;
+    height: 10vh;
+    width: 100vw;
+    left: 0;
+    background-color: #999;
+    transition: bottom 0.4s ease;
+}
+
+#learn--next-container.collapsed {
+    bottom: -10vh;
+}
+#learn--next-btn {
+    position: absolute;
+    right: 10vw;
+    top: 2vh;
+    width: 8vw;
+    height: 5vh;
+    border-radius: 5px;
+    font-size: 1.3em;
+}

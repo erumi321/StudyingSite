@@ -25,6 +25,13 @@
     text-align: center;
 }
 
+#firebaseui-auth-container {
+    z-index: 1000;
+}
+#firebaseui-auth-container * {
+    z-index: 1000;
+}
+
 .main--animation {
     animation-name: swap;
     animation-duration: 0.4s;
@@ -217,6 +224,15 @@
 
 .myset--card:hover {
     filter: brightness(60%)
+}
+
+#learn-btn {
+    display: block;
+    border: 3px solid #999;
+    color: #ccc;
+    background-color: #4545aa;
+    width: 5vw;
+    margin: 23vh auto 0 auto;
 }
 
 .hidden {

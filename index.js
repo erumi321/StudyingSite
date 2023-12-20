@@ -1,5 +1,4 @@
 var questionAnswer = []
-
 function swapMain(doFlip = true) {
     let p = document.getElementById("main--container")
     if (p.classList.contains("main--animation")) {

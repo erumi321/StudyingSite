@@ -18,44 +18,49 @@
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/6.0.1/firebase-ui-auth.css" />
 
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="learn.css">
 </head>
 <body onload="onDocLoad()">
     <div id="firebaseui-auth-container">
         
     </div>
-    <div id="main--container" onclick="swapMain()">
-        <div style="display:flex;justify-content:center;align-items:center;height:30vh;"><p id="main--side-question" class="main--text"></p></div>
-        <div style="display:flex;justify-content:center;align-items:center;height:30vh;" class="hidden"><p id="main--side-answer" class="main--text"></p></div>
-    </div>
-    <div id="question-control">
-        <button id="question-control--next" class="changebtn" onclick="lastQuestion()"><span class="material-symbols-outlined">
-            arrow_back_ios
-            </span></button>
-        <button id="question-control--last" class="changebtn" style="margin-left: 4vw" onclick="nextQuestion()"><span class="material-symbols-outlined">
-            arrow_forward_ios
-            </span></button>
-    </div>
-    <div id="input-bar" class="hidden">
-        <!-- <button id="input--toggle" onclick="document.getElementById('input-bar').classList.toggle('collapsed')"></button> -->
-        <div id="input--question-container">
-            <span id="input--add-btn" class="material-symbols-outlined" onclick="addQuestionAnswerField()">add_circle</span>
+    <div id="flashcard-container">
+        <button id="learn-btn" onclick="Learn_Start()">Learn</button>
+        <div id="main--container" onclick="swapMain()">
+            <div style="display:flex;justify-content:center;align-items:center;height:30vh;"><p id="main--side-question" class="main--text"></p></div>
+            <div style="display:flex;justify-content:center;align-items:center;height:30vh;" class="hidden"><p id="main--side-answer" class="main--text"></p></div>
         </div>
-        <div id="input--name-container">
-            <p id="input--name-label">Name</p>
-            <input type="text" id="input--name-field">
+        <div id="question-control">
+            <button id="question-control--next" class="changebtn" onclick="lastQuestion()"><span class="material-symbols-outlined">
+                arrow_back_ios
+                </span></button>
+            <button id="question-control--last" class="changebtn" style="margin-left: 4vw" onclick="nextQuestion()"><span class="material-symbols-outlined">
+                arrow_forward_ios
+                </span></button>
         </div>
-        <button id="input--save" onclick="SaveSet()">Save</button>
-    </div>
-
-    <div id="set-bar" class="collapsed">
-        <span id="set-bar--expander" class="material-symbols-outlined" onclick="toggleSetbar()">menu</span>
-        <button id="set-bar--new-set" onclick="NewSet()">New Set</button>
-        <p id="set-bar--top-label">My Sets</p>
-        <div id="set-bar--myset-container">
+        <div id="input-bar"">
+            <!-- <button id="input--toggle" onclick="document.getElementById('input-bar').classList.toggle('collapsed')"></button> -->
+            <div id="input--question-container">
+                <span id="input--add-btn" class="material-symbols-outlined" onclick="addQuestionAnswerField()">add_circle</span>
+            </div>
+            <div id="input--name-container">
+                <p id="input--name-label">Name</p>
+                <input type="text" id="input--name-field">
+            </div>
+            <button id="input--save" onclick="SaveSet()">Save</button>
+        </div>
+    
+        <div id="set-bar" class="collapsed">
+            <span id="set-bar--expander" class="material-symbols-outlined" onclick="toggleSetbar()">menu</span>
+            <button id="set-bar--new-set" onclick="NewSet()">New Set</button>
+            <p id="set-bar--top-label">My Sets</p>
+            <div id="set-bar--myset-container">
+            </div>
         </div>
     </div>
 
     <script src="firebase_api.js"></script>
     <script src="index.js"></script>
+    <script src="learn.js"></script>
 </body>
 </html>
