@@ -58,6 +58,8 @@ function signInSuccess(authResult) {
     localStorage.setItem("currentUser", JSON.stringify(authResult))
 
     document.getElementById("input-bar").classList.remove("hidden")
+
+    window.location.reload()
 }
 
 function nextQuestion() {
