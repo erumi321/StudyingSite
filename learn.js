@@ -1,24 +1,35 @@
 var Learn_CurrentID = 0;
 
 function Learn_Start() {
-    window.location.href = "learn.html?" + window.location.search.substring(1)
+    let s = CurrentSetName + encodeURIComponent("~/../~")  + window.location.search.substring(1) + encodeURIComponent("~/../~")
+    for(var x = 0; x < questionAnswer.length; x++) {
+        s = s + encodeURIComponent(questionAnswer[x][0].replace(";;;", "")) + encodeURIComponent("~!") + encodeURIComponent(questionAnswer[x][1].replace(";;;", ""))
+        if (x != questionAnswer.length - 1) {
+            s = s + encodeURIComponent(";;;")
+        }
+    }
+    window.location.href = "learn.html?" + s
 }
 
 function Learn_OnLoad() {
-    API_getData("sets", window.location.search.substring(1), (docRef) => {
-        let qData = docRef.data()["questions"]
-
-        for(var i = 0; i < qData.length; i++) {
-            let s = qData[i].split("~!")
-            questionAnswer[i] = [s[0], s[1]]
-        }
-        document.getElementById("learn-title").innerText = "Learn: " + docRef.data()["name"]
-        Learn_BuildMC()
-    })
+    let i = decodeURIComponent(window.location.search)
+    let s = i.split("~/../~")[2].split(";;;")
+    console.log(s)
+    for(var x = 0; x < s.length; x++) {
+        let n = []
+        n[0] = s[x].split("~!")[0]
+        n[1] = s[x].split("~!")[1]
+        questionAnswer[x] = [n[0], n[1]]
+    }
+    document.getElementById("learn-title").innerText = "Learn: " + i.split("~/../~")[0]
+    Learn_BuildMC()
+    
 }
 
 function Learn_End() {
-    window.location.href = "index.html?" + window.location.search.substring(1)
+    let i = decodeURIComponent(window.location.search)
+    let s = i.split("~/../~")[1]
+    window.location.href = "index.html?" + s
 }
 
 function Learn_BuildMC() {

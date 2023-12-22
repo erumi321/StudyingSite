@@ -1,3 +1,4 @@
+var CurrentSetName = ""
 var questionAnswer = []
 function swapMain(doFlip = true) {
     let p = document.getElementById("main--container")
@@ -174,6 +175,7 @@ function SaveSet() {
         return
     }
     API_updateData("sets", {"name": setName, "questions": data}, window.location.search.substring(1))
+    window.location.reload()
 }
 
 function LoadSet() {
@@ -190,6 +192,10 @@ function LoadSet() {
             document.getElementById("input-bar").classList.remove("hidden")
             document.getElementById("input--name-field").value = docRef.data()["name"]
         }
+
+        CurrentSetName = docRef.data()["name"]
+
+        document.getElementById("learn-btn").classList.remove("hidden")
 
         updateFields()
         updateQuestion()
@@ -222,5 +228,5 @@ function ChangeToSet(setId) {
 }
 
 function NewSet() {
-    window.location = window.location.origin
+    window.location.href = window.location.href.split("?")[0]
 }
