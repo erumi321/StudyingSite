@@ -73,3 +73,34 @@
     border-radius: 5px;
     font-size: 1.3em;
 }
+
+#learn--type-input {
+    position: relative;
+    top: 32vh;
+    left: 0.75vw;
+    width: 38vw;
+    height: 5vh;
+    font-size: 1.3em;
+    transition: all 0.3s ease;
+}
+
+#learn--type-input.correct {
+    background-color: #014421;
+    color: #ddd
+}
+
+#learn--type-input.incorrect {
+    background-color: #CE2029;
+}
+
+#learn--type-submit {
+    position: relative;
+    background-color: #4545aa;
+    left: 34.25vw;
+    top: 33vh;
+    width: 5vw;
+    height: 2vw;
+    color: #ccc;
+    border-radius: 4px;
+    border: 3px solid #555;
+}

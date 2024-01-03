@@ -1,4 +1,18 @@
+var Learn_StachedQuestions = []
+var Learn_DoStachedQuestions = false
+
 var Learn_CurrentID = 0;
+
+let enter_event = null
+
+document.addEventListener("keydown", function(event) {
+    if (event.key == "Enter" && enter_event != null) {
+        setTimeout(() => {
+            enter_event()
+            
+        }, 30);
+    }
+})
 
 function Learn_Start() {
     let s = CurrentSetName + encodeURIComponent("~/../~")  + window.location.search.substring(1) + encodeURIComponent("~/../~")
@@ -33,6 +47,9 @@ function Learn_End() {
 }
 
 function Learn_BuildMC() {
+    document.getElementById("learn--type-container").classList.add("hidden")
+    document.getElementById("learn--mc-container").classList.remove("hidden")
+
     let currentQuestion = questionAnswer[Learn_CurrentID][0]
     let currentAnswer = questionAnswer[Learn_CurrentID][1]
     document.getElementById("learn--main--title").innerText = currentQuestion
@@ -92,11 +109,7 @@ function Learn_CorrectMCAnswer(correctIndex) {
     document.getElementById("learn--next-txt").innerText = "Correct!"
     document.getElementById("learn--next-container").classList.remove("collapsed")
 
-    if (Learn_CurrentID == questionAnswer.length - 1) {
-        document.getElementById("learn--next-btn").innerText = "Finish"
-    }else{
-        document.getElementById("learn--next-btn").innerText = "Next"
-    }
+    Learn_SetupNextButton()
 
     // Learn_BuildMC()
 }
@@ -109,22 +122,20 @@ function Learn_FalseMCAnswer(correctIndex, clickedIndex) {
     document.getElementById("learn--next-txt").innerText = "Incorrect!"
     document.getElementById("learn--next-container").classList.remove("collapsed")
 
-    if (Learn_CurrentID == questionAnswer.length - 1) {
-        document.getElementById("learn--next-btn").innerText = "Finish"
-    }else{
-        document.getElementById("learn--next-btn").innerText = "Next"
-    }
+    Learn_SetupNextButton()
 
 }
 
 function Learn_NextQuestion() {
-    Learn_CurrentID++;
-
-    if (Learn_CurrentID >= questionAnswer.length) {
+    enter_event = null
+    if (Learn_CurrentID >= questionAnswer.length - 1 && Learn_StachedQuestions.length == 0) {
         Learn_End()
     }
     
     document.getElementById("learn--next-container").classList.add("collapsed")
+    document.getElementById("learn--type-input").value = ""
+    document.getElementById("learn--type-input").classList.remove("correct")
+    document.getElementById("learn--type-input").classList.remove("incorrect")
     let btns = document.getElementsByClassName("learn--mc-btn") 
     for(var x = 0; x < btns.length; x++) {
         btns[x].classList.remove("learn--false-btn")
@@ -132,7 +143,64 @@ function Learn_NextQuestion() {
         btns[x].classList.remove("revealed")
     }
     
+    if (Learn_DoStachedQuestions == false) {
+        Learn_StachedQuestions.push(Learn_CurrentID)
+    }
+    if (Learn_StachedQuestions.length >= 4) {
+        Learn_DoStachedQuestions = true
+    }
+
+    if (Learn_DoStachedQuestions == true) {
+        if (Learn_StachedQuestions.length > 0) {
+            Learn_CurrentID = Learn_StachedQuestions.shift()
+            console.log(Learn_CurrentID)
+            Learn_BuildType()
+        }else{
+            Learn_DoStachedQuestions = false
+        }
+        return
+    }
+
+    Learn_CurrentID++
     Learn_BuildMC()
+}
+
+function Learn_SetupNextButton() {
+    document.getElementById("learn--next-btn").innerText = "Next"
+
+    if (Learn_CurrentID == questionAnswer.length - 1 && Learn_StachedQuestions.length == 0) {
+        document.getElementById("learn--next-btn").innerText = "Finish"
+    }
+
+    enter_event = Learn_NextQuestion
+}
+
+function Learn_BuildType() {
+    document.getElementById("learn--type-container").classList.remove("hidden")
+    document.getElementById("learn--mc-container").classList.add("hidden")
+
+    let currentQuestion = questionAnswer[Learn_CurrentID][0]
+    document.getElementById("learn--main--title").innerText = currentQuestion
+    enter_event = Learn_SubmitType
+    document.getElementById("learn--type-input").focus()
+}
+
+function Learn_SubmitType() {
+    enter_event = null
+    
+    let currentAnswer = questionAnswer[Learn_CurrentID][1]
+    let response = document.getElementById("learn--type-input").value
+
+    if (response == currentAnswer) {
+        document.getElementById("learn--next-txt").innerText = "Correct!"
+        document.getElementById("learn--type-input").classList.add("correct")
+    }else{
+        document.getElementById("learn--next-txt").innerText = "Incorrect!"
+        document.getElementById("learn--type-input").classList.add("incorrect")
+    }
+    document.getElementById("learn--next-container").classList.remove("collapsed")
+
+    Learn_SetupNextButton()
 }
 
 function getRandomIndex(list) {

@@ -45,12 +45,14 @@ function onDocLoad() {
         isOwner = true;
         document.getElementById("input-bar").classList.remove("hidden")
     }
+    document.body.classList.remove("hidden")
 }
 
 function createAuthUI() {
     //do not create the sign-in with google button if we already are signed-in
     if (API_getCurrentUser() == null) {
         API_createAuthUI(signInSuccess, false, "")
+        document.getElementById("flashcard-container").classList.add("hidden")
     }
 }
 
@@ -160,6 +162,15 @@ function addQuestionAnswerField(initial = ["", ""], doUpdate=true) {
 }
 
 function SaveSet() {
+    if (questionAnswer.length < 4) {
+        alert("Plase have at least 4 sets of questions/answers")
+        return
+    }
+    if (document.getElementById("input--name-field").value.length < 2) {
+        alert("Please have a set name at least 2 characters long")
+        return
+    }
+
     let data = []
     for(var i = 0; i < questionAnswer.length; i++) {
         if (questionAnswer[i][0].replace("~!", "") == "" || questionAnswer[i][1].replace("~!", "") == "") {
@@ -176,8 +187,8 @@ function SaveSet() {
         })
         return
     }
-    API_updateData("sets", {"name": setName, "questions": data}, window.location.search.substring(1))
-    window.location.reload()
+    console.log(data)
+    API_updateData("sets", {"name": setName, "questions": data}, window.location.search.substring(1), () => {window.location.reload()})
 }
 
 function LoadSet() {
