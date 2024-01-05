@@ -28,7 +28,7 @@ function Learn_Start() {
 function Learn_OnLoad() {
     let i = decodeURIComponent(window.location.search)
     let s = i.split("~/../~")[2].split(";;;")
-    console.log(s)
+    
     for(var x = 0; x < s.length; x++) {
         let n = []
         n[0] = s[x].split("~!")[0]
@@ -128,9 +128,6 @@ function Learn_FalseMCAnswer(correctIndex, clickedIndex) {
 
 function Learn_NextQuestion() {
     enter_event = null
-    if (Learn_CurrentID >= questionAnswer.length - 1 && Learn_StachedQuestions.length == 0) {
-        Learn_End()
-    }
     
     document.getElementById("learn--next-container").classList.add("collapsed")
     document.getElementById("learn--type-input").value = ""
@@ -146,6 +143,14 @@ function Learn_NextQuestion() {
     if (Learn_DoStachedQuestions == false) {
         Learn_StachedQuestions.push(Learn_CurrentID)
     }
+    if (Learn_CurrentID >= questionAnswer.length - 1) {
+        if (Learn_StachedQuestions.length == 0) {
+            Learn_End()
+        }else{
+            Learn_DoStachedQuestions = true
+        }
+    }
+
     if (Learn_StachedQuestions.length >= 4) {
         Learn_DoStachedQuestions = true
     }
@@ -153,12 +158,12 @@ function Learn_NextQuestion() {
     if (Learn_DoStachedQuestions == true) {
         if (Learn_StachedQuestions.length > 0) {
             Learn_CurrentID = Learn_StachedQuestions.shift()
-            console.log(Learn_CurrentID)
             Learn_BuildType()
+            return
         }else{
             Learn_DoStachedQuestions = false
         }
-        return
+        
     }
 
     Learn_CurrentID++

@@ -38,16 +38,17 @@
                 arrow_forward_ios
                 </span></button>
         </div>
-        <div id="input-bar"">
+        <div id="input--name-container">
+            <p id="input--name-label">Name</p>
+            <input type="text" id="input--name-field">
+        </div>
+            <button id="input--save" onclick="SaveSet()">Save</button>
+            <div id="input-bar" class="center">
             <!-- <button id="input--toggle" onclick="document.getElementById('input-bar').classList.toggle('collapsed')"></button> -->
             <div id="input--question-container">
-                <span id="input--add-btn" class="material-symbols-outlined" onclick="addQuestionAnswerField()">add_circle</span>
+                
             </div>
-            <div id="input--name-container">
-                <p id="input--name-label">Name</p>
-                <input type="text" id="input--name-field">
-            </div>
-            <button id="input--save" onclick="SaveSet()">Save</button>
+
         </div>
     
         <div id="set-bar" class="collapsed">
