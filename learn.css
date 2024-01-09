@@ -109,3 +109,21 @@ html, body {
     border-radius: 4px;
     border: 3px solid #555;
 }
+
+#learn--mc-incorrect {
+    position: absolute;
+    left: 2vw;
+    top: -6vh;
+    color: rgb(211, 40, 40);
+    font-size: 0.9em;
+    font-weight: 700;
+}
+
+#learn--type-incorrect {
+    position: absolute;
+    left: 1vw;
+    top: 36vh;
+    color: rgb(211, 40, 40);
+    font-size: 0.9em;
+    font-weight: 700;
+}

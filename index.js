@@ -1,5 +1,6 @@
 var CurrentSetName = ""
 var questionAnswer = []
+
 function swapMain(doFlip = true) {
     let p = document.getElementById("main--container")
     if (p.classList.contains("main--animation")) {
@@ -45,7 +46,10 @@ function onDocLoad() {
         isOwner = true;
         document.getElementById("input-bar").classList.remove("hidden")
     }
+    addQuestionAnswerField(["", ""], 0)
+
     document.body.classList.remove("hidden")
+
 }
 
 function createAuthUI() {
@@ -138,7 +142,7 @@ function updateFields() {
 
 
 function updateQuestionAnswer(childIndex, index, part, v) {
-    if (index == questionAnswer.length) {
+    if (index >= questionAnswer.length) {
         questionAnswer[index] = ["", ""]
     }
     questionAnswer[index][part] = v.value
@@ -171,7 +175,7 @@ function removeQuestionAnswer(index) {
     updateFields()
 }
 
-function addQuestionAnswerField(initial = ["", ""], updateIndex = -1, isLast = false) {
+function addQuestionAnswerField(initial = ["", ""], updateIndex = -1) {
     let p = document.getElementById("input--question-container")
     for (var x = 0; x < 2; x++) {
         let i = document.createElement("input")

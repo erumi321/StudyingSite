@@ -3,6 +3,12 @@ var Learn_DoStachedQuestions = false
 
 var Learn_CurrentID = 0;
 
+var Learn_StachedIncorrectMC = []
+var Learn_StachedIncorrectTyping = []
+var Learn_DoingIncorrect = false
+var Learn_ForceIncorrectQuestions = false
+var Learn_PreIncorrectID = -1;
+
 let enter_event = null
 
 document.addEventListener("keydown", function(event) {
@@ -46,7 +52,7 @@ function Learn_End() {
     window.location.href = "index.html?" + s
 }
 
-function Learn_BuildMC() {
+function Learn_BuildMC(isIncorrect = false) {
     document.getElementById("learn--type-container").classList.add("hidden")
     document.getElementById("learn--mc-container").classList.remove("hidden")
 
@@ -100,6 +106,12 @@ function Learn_BuildMC() {
         btns[currentIndex].classList.add("learn--false-btn")
         btns[currentIndex].setAttribute("onclick", "Learn_FalseMCAnswer(" + correctIndex +", " + currentIndex + ")")
     }
+
+    if (isIncorrect) {
+        document.getElementById("learn--mc-incorrect").classList.remove("hidden")
+    }else{
+        document.getElementById("learn--mc-incorrect").classList.add("hidden")
+    }
 }
 
 function Learn_CorrectMCAnswer(correctIndex) {
@@ -109,7 +121,7 @@ function Learn_CorrectMCAnswer(correctIndex) {
     document.getElementById("learn--next-txt").innerText = "Correct!"
     document.getElementById("learn--next-container").classList.remove("collapsed")
 
-    Learn_SetupNextButton()
+    Learn_SetupNextButton(true)
 
     // Learn_BuildMC()
 }
@@ -122,11 +134,18 @@ function Learn_FalseMCAnswer(correctIndex, clickedIndex) {
     document.getElementById("learn--next-txt").innerText = "Incorrect!"
     document.getElementById("learn--next-container").classList.remove("collapsed")
 
-    Learn_SetupNextButton()
+    Learn_SetupNextButton(false)
 
 }
 
-function Learn_NextQuestion() {
+function Learn_NextQuestionCorrect() {
+    Learn_NextQuestionInternal(true)
+}
+function Learn_NextQuestionIncorrect() {
+    Learn_NextQuestionInternal(false)
+}
+
+function Learn_NextQuestionInternal(isCorrect) {
     enter_event = null
     
     document.getElementById("learn--next-container").classList.add("collapsed")
@@ -140,47 +159,129 @@ function Learn_NextQuestion() {
         btns[x].classList.remove("revealed")
     }
     
-    if (Learn_DoStachedQuestions == false) {
+    if (isCorrect == false) {
+        if (Learn_DoStachedQuestions) {
+            Learn_StachedIncorrectTyping.push(Learn_CurrentID)
+        }else{
+            Learn_StachedIncorrectMC.push(Learn_CurrentID)
+        }
+    }
+
+    if (Learn_StachedIncorrectMC.length == 0 && Learn_StachedIncorrectTyping.length == 0) {
+        Learn_ForceIncorrectQuestions = false
+    }
+
+    if (Learn_DoStachedQuestions == false && isCorrect == true) {
         Learn_StachedQuestions.push(Learn_CurrentID)
     }
     if (Learn_CurrentID >= questionAnswer.length - 1) {
-        if (Learn_StachedQuestions.length == 0) {
+        if (Learn_StachedQuestions.length == 0 && Learn_StachedIncorrectMC.length == 0 && Learn_StachedIncorrectTyping.length == 0) {
             Learn_End()
-        }else{
+        }else if (Learn_StachedQuestions.length != 0) {
+            Learn_DoStachedQuestions = true
+        }else if (Learn_StachedIncorrectMC.length > 0 || Learn_StachedIncorrectTyping.length > 0) {
+            Learn_ForceIncorrectQuestions = true
+        }
+    }
+
+    if (Learn_ForceIncorrectQuestions == false) {
+        var m = Learn_StachedIncorrectMC.length + Learn_StachedIncorrectTyping.length
+        var doIncorrect = getRandomInt(0, 6)
+
+        if (m > 0 && (doIncorrect >= 3 || m >= 4)) {
+            Learn_DoNextIncorrect()
+            return
+        }
+
+        if (Learn_PreIncorrectID != -1) {
+            console.log("exiting to correct at id: ", Learn_PreIncorrectID)
+            Learn_CurrentID = Learn_PreIncorrectID
+            Learn_PreIncorrectID = -1
+        }
+        if (Learn_StachedQuestions.length >= 4) {
             Learn_DoStachedQuestions = true
         }
-    }
-
-    if (Learn_StachedQuestions.length >= 4) {
-        Learn_DoStachedQuestions = true
-    }
-
-    if (Learn_DoStachedQuestions == true) {
-        if (Learn_StachedQuestions.length > 0) {
-            Learn_CurrentID = Learn_StachedQuestions.shift()
-            Learn_BuildType()
-            return
-        }else{
-            Learn_DoStachedQuestions = false
+    
+        if (Learn_DoStachedQuestions == true) {
+            if (Learn_StachedQuestions.length > 0) {
+                Learn_CurrentID = Learn_StachedQuestions.shift()
+                Learn_BuildType()
+                return
+            }else{
+                Learn_DoStachedQuestions = false
+            }
+            
         }
-        
+    
+        Learn_CurrentID++
+        Learn_BuildMC()
+    }else{
+        Learn_DoNextIncorrect()
     }
 
-    Learn_CurrentID++
-    Learn_BuildMC()
 }
 
-function Learn_SetupNextButton() {
+function Learn_DoNextIncorrect() {
+    if (Learn_StachedIncorrectMC.length > 0 && Learn_StachedIncorrectTyping.length > 0) {
+        var doTyping = getRandomInt(0, 2) == 0
+        
+        if (Learn_PreIncorrectID == -1) {
+            Learn_PreIncorrectID = Learn_CurrentID
+        }
+
+        if (doTyping) {
+            var i = getRandomIndex(Learn_StachedIncorrectTyping)
+            Learn_CurrentID = Learn_StachedIncorrectTyping[i]
+            Learn_StachedIncorrectTyping.splice(i, 1)
+
+            Learn_BuildType(true)
+        }else{
+            var i = getRandomIndex(Learn_StachedIncorrectMC)
+            Learn_CurrentID = Learn_StachedIncorrectMC[i]
+            Learn_StachedIncorrectMC.splice(i, 1)
+
+            Learn_BuildMC(true)
+        }
+    }else if (Learn_StachedIncorrectMC.length > 0) {
+        if (Learn_PreIncorrectID == -1) {
+            Learn_PreIncorrectID = Learn_CurrentID
+        }
+
+        var i = getRandomIndex(Learn_StachedIncorrectMC)
+        Learn_CurrentID = Learn_StachedIncorrectMC[i]
+        Learn_StachedIncorrectMC.splice(i, 1)
+
+        Learn_BuildMC(true)
+    }else if (Learn_StachedIncorrectTyping.length > 0) {
+        if (Learn_PreIncorrectID == -1) {
+            Learn_PreIncorrectID = Learn_CurrentID
+        }
+
+        var i = getRandomIndex(Learn_StachedIncorrectTyping)
+        Learn_CurrentID = Learn_StachedIncorrectTyping[i]
+        Learn_StachedIncorrectTyping.splice(i, 1)
+
+        Learn_BuildType(true)
+    }
+}
+
+function Learn_SetupNextButton(isCorrect) {
     document.getElementById("learn--next-btn").innerText = "Next"
 
-    if (Learn_CurrentID == questionAnswer.length - 1 && Learn_StachedQuestions.length == 0) {
+    if (Learn_CurrentID == questionAnswer.length - 1 && Learn_StachedQuestions.length == 0 && Learn_StachedIncorrectMC.length == 0 && Learn_StachedIncorrectTyping.length == 0) {
         document.getElementById("learn--next-btn").innerText = "Finish"
     }
 
-    enter_event = Learn_NextQuestion
+    if (isCorrect) {
+        enter_event = Learn_NextQuestionCorrect
+        document.getElementById("learn--next-btn").setAttribute("onclick", "Learn_NextQuestionCorrect()")
+    }else{
+        enter_event = Learn_NextQuestionIncorrect
+        document.getElementById("learn--next-btn").setAttribute("onclick", "Learn_NextQuestionIncorrect()")
+    }
 }
 
-function Learn_BuildType() {
+function Learn_BuildType(isIncorrect = false) {
     document.getElementById("learn--type-container").classList.remove("hidden")
     document.getElementById("learn--mc-container").classList.add("hidden")
 
@@ -188,6 +289,12 @@ function Learn_BuildType() {
     document.getElementById("learn--main--title").innerText = currentQuestion
     enter_event = Learn_SubmitType
     document.getElementById("learn--type-input").focus()
+
+    if (isIncorrect) {
+        document.getElementById("learn--type-incorrect").classList.remove("hidden")
+    }else{
+        document.getElementById("learn--type-incorrect").classList.add("hidden")
+    }
 }
 
 function Learn_SubmitType() {
@@ -196,16 +303,18 @@ function Learn_SubmitType() {
     let currentAnswer = questionAnswer[Learn_CurrentID][1]
     let response = document.getElementById("learn--type-input").value
 
-    if (response == currentAnswer) {
+    if (response.toLowerCase() == currentAnswer.toLowerCase()) {
         document.getElementById("learn--next-txt").innerText = "Correct!"
         document.getElementById("learn--type-input").classList.add("correct")
+        Learn_SetupNextButton(true)
     }else{
         document.getElementById("learn--next-txt").innerText = "Incorrect!"
         document.getElementById("learn--type-input").classList.add("incorrect")
+        Learn_SetupNextButton(false)
+
     }
     document.getElementById("learn--next-container").classList.remove("collapsed")
 
-    Learn_SetupNextButton()
 }
 
 function getRandomIndex(list) {
